@@ -23,11 +23,13 @@ def affichage(foret):
     label = tk.Label(fenetre, text="Wildfire") #Met en place le titre
     label.pack()
 
-    canvas = tk.Canvas(fenetre, width=foret.shape[0]*10, height=foret.shape[1]*10,background='#c68c53') #On définit le canevas qui affiche notre forêt
+    canvas = tk.Canvas(fenetre, width=(foret.shape[0]+2)*10, height=(foret.shape[1]+2)*10,background='red') #On définit le canevas qui affiche notre forêt
+    canvas.create_rectangle(10,10,(foret.shape[0]+1)*10,(foret.shape[1]+1)*10,fill='#c68c53')
     for i in range(0,foret.shape[0]):
         for j in range(0,foret.shape[1]):
             if foret[i,j]== 1:
-                canvas.create_rectangle(i*10,j*10,(i+1)*10,(j+1)*10,fill='green',width=0)
+                canvas.create_rectangle((i+1)*10,(j+1)*10,(i+2)*10,(j+2)*10,fill='green',width=0)
     canvas.pack()
-    
+    bouton = tk.Button(fenetre, text="Quitter", command=fenetre.quit)
+    bouton.pack()
     fenetre.mainloop() #affiche la fenêtre
