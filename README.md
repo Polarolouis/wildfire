@@ -9,3 +9,7 @@
 
  - **affichage(foret)** : 
  La fonction prend en entrée une matrice et génère une forêt selon les règles suivantes :  si la case contient un 1 alors il y a un arbre, rien sinon
+
+
+***classes.py***
+Essaie de définition du programme à partir de Classes Python dans le but de simplifier le code, ou du moins son écriture.
