@@ -4,6 +4,7 @@ Created on Fri Feb  1 11:30:02 2019
 
 @author: LordOf20th
 """
+import os
 import numpy as np
 import random
 #import tkinter as tk
@@ -36,29 +37,26 @@ def enflammer(foret,x,y): #Fonction mettant le feu aléatoirement à une case
     return foretEnflammée
 
 def propager(F,k,i,j):
-    if not i == 0 and not i == F[k].shape[0]-1 and not j == 0 and not j == F[k].shape[1]-1: #Si la case n'est pas sur la bordure 
-        print("La case {};{} va bruler les quatre autour d'elle".format(i,j))
-        if F[k][i-1,j] == 1: #Si la case au dessus est un arbre
+    try:
+        if F[k-1][i-1,j] == 1: #Si la case au dessus est un arbre
             F[k][i-1,j] = -1 #La case au dessus brûle
-        if F[k][i+1,j] == 1: #Si la case au dessous est un arbre
+    except IndexError:
+        print("Case au bord supérieur {};{}".format(i,j))
+    try:
+        if F[k-1][i+1,j] == 1: #Si la case au dessous est un arbre
             F[k][i+1,j] = -1 #La case en dessous brûle
-        if F[k][i,j-1] == 1: #Si la case à gauche est un arbre
+    except IndexError:
+         print("Case au bord inférieur {};{}".format(i,j))
+    try:
+        if F[k-1][i,j-1] == 1: #Si la case à gauche est un arbre
             F[k][i,j-1] = -1 #La case à gauche brûle
-        if F[k][i,j+1] ==1: #Si la case à droite est un arbre
+    except IndexError:
+        print("Case au bord gauche {};{}".format(i,j))
+    try:
+        if F[k-1][i,j+1] ==1: #Si la case à droite est un arbre
             F[k][i,j+1] = -1 #La case à droite brûle
-            
-    if i == 0:#La case est au bord supérieur
-        if F[k][i+1,j] == 1: #Si la case au dessous est un arbre
-            F[k][i+1,j] = -1 #La case en dessous brûle
-    if i == F[k].shape[0]-1: #La case est au bord inférieur
-        if F[k][i-1,j] == 1: #Si la case au dessus est un arbre
-            F[k][i-1,j] = -1 #La case au dessus brûle
-    if j == 0: #La case est au bord gauche
-        if F[k][i,j+1] ==1: #Si la case à droite est un arbre
-            F[k][i,j+1] = -1 #La case à droite brûle
-    if j == F[k].shape[1]-1: #La case est au bord droit
-        if F[k][i,j-1] == 1: #Si la case à gauche est un arbre
-            F[k][i,j-1] = -1 #La case à gauche brûle
+    except IndexError:
+        print("Case au bord droit {};{}".format(i,j))
 
 def feuDeForet(n, tours, p=0.5, x=-1, y=-1):
     F=[genForet(n, p)]
@@ -102,3 +100,9 @@ def feuDeForet(n, tours, p=0.5, x=-1, y=-1):
     bouton = tk.Button(fenetre, text="Quitter", command=fenetre.quit)
     bouton.pack()
     fenetre.mainloop() #affiche la fenêtre """ 
+    
+#Fonctions utiles à l'affichage 
+def pause():
+    input("Appuyer sur Entrée pour continuer . . .")
+def affichage(F):
+    
