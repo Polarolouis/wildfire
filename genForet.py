@@ -4,10 +4,9 @@ Created on Fri Feb  1 11:30:02 2019
 
 @author: LordOf20th
 """
-import os
 import numpy as np
 import random
-#import tkinter as tk
+import tkinter as tk
 """
     Les états possibles de nos cases :
         - 0 : pas d'arbre
