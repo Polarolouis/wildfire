@@ -40,22 +40,22 @@ def propager(F,k,i,j):
         if F[k-1][i-1,j] == 1: #Si la case au dessus est un arbre
             F[k][i-1,j] = -1 #La case au dessus brûle
     except IndexError:
-        print("Case au bord supérieur {};{}".format(i,j))
+        pass
     try:
         if F[k-1][i+1,j] == 1: #Si la case au dessous est un arbre
             F[k][i+1,j] = -1 #La case en dessous brûle
     except IndexError:
-         print("Case au bord inférieur {};{}".format(i,j))
+         pass
     try:
         if F[k-1][i,j-1] == 1: #Si la case à gauche est un arbre
             F[k][i,j-1] = -1 #La case à gauche brûle
     except IndexError:
-        print("Case au bord gauche {};{}".format(i,j))
+        pass
     try:
         if F[k-1][i,j+1] ==1: #Si la case à droite est un arbre
             F[k][i,j+1] = -1 #La case à droite brûle
     except IndexError:
-        print("Case au bord droit {};{}".format(i,j))
+        pass
 
 def feuDeForet(n, tours, p=0.5, x=-1, y=-1):
     F=[genForet(n, p)]
@@ -103,5 +103,5 @@ def feuDeForet(n, tours, p=0.5, x=-1, y=-1):
 #Fonctions utiles à l'affichage 
 def pause():
     input("Appuyer sur Entrée pour continuer . . .")
-def affichage(F):
+#def affichage(F):
     
