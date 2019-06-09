@@ -61,19 +61,46 @@ def propager(F, k, i, j):
         pass
 
 
+def propager2(F, k, i,j):
+    print("rang :"+str(k)+" ("+str(i)+","+str(j)+")")
+    # On ajuste les indices pour rester dans les index
+    i = i-1
+    j = j-1
+    if i == 0:  # On est sur la ligne du haut
+        if F[k-1][i+1, j] == 1:  # Si la case au dessous est un arbre
+            F[k][i+1, j] = -1  # La case en dessous brûle
+    elif i == F[k].shape[0]:  # On est sur la ligne du bas
+        if F[k-1][i-1, j] == 1:  # Si la case au dessus est un arbre
+            F[k][i-1, j] = -1  # La case au dessus brûle
+    else:
+        if F[k-1][i-1, j] == 1:  # Si la case au dessus est un arbre
+            F[k][i-1, j] = -1  # La case au dessus brûle
+        if F[k-1][i+1, j] == 1:  # Si la case au dessous est un arbre
+            F[k][i+1, j] = -1  # La case en dessous brûle
+    if j == 0:  # On est sur la colonne de gauche
+        if F[k-1][i, j+1] == 1:  # Si la case à droite est un arbre
+            F[k][i, j+1] = -1  # La case à droite brûle
+    elif j == F[k].shape[1]:  # On est sur la colonne de droite
+        if F[k-1][i, j-1] == 1:  # Si la case à gauche est un arbre
+            F[k][i, j-1] = -1  # La case à gauche brûle
+    else:  # On est sur aucune des colonnes latérales
+        if F[k-1][i, j-1] == 1:  # Si la case à gauche est un arbre
+            F[k][i, j-1] = -1  # La case à gauche brûle
+        if F[k-1][i, j+1] == 1:  # Si la case à droite est un arbre
+            F[k][i, j+1] = -1  # La case à droite brûle
+
 def feuDeForet(F):
     k = 2
     while -1 in F[k-1]:
             F.append(np.copy(F[k-1]))  # On copie la forêt du tour précédent
-
             for i in range(0, F[k].shape[0]):
                 for j in range(0, F[k].shape[1]):
                     if F[k-1][i, j] == -1:  # Si la case est en feu au rang k
                         if F[k-1][i, j] == 0:  # Si cette case ne portait pas d'arbre au rang k-1 alors on propage le feu et la case s'éteint
-                            propager(F, k, i, j)
+                            propager2(F, k, i, j)
                             F[k][i, j] = 0
                         elif F[k-2][i, j] == -1:  # Si la case était en feu au tour précédent : propage et mort de l'arbre
-                            propager(F, k, i, j)
+                            propager2(F, k, i, j)
                             F[k][i, j] = -2
                         else:  # La case a été mise en feu, elle propage le feu
                             propager(F, k, i, j)
@@ -89,6 +116,8 @@ def wildfire(n, p, x=-1, y=-1):
     feuDeForet(F)
     return F
 
+#  Affichage
+
 
 def affichage(F):
     for k in range(0, len(F)):
@@ -97,14 +126,7 @@ def affichage(F):
         label.pack()
         canvas = tk.Canvas(fenetre, width=(F[k].shape[0]+2)*10, height=(F[k].shape[1]+2)*10, background='#c0c0c0')  # On définit le canevas qui affiche notre forêt
         canvas.create_rectangle(10, 10, (F[k].shape[0]+1)*10, (F[0].shape[1]+1)*10, fill='#c68c53')
-        for i in range(0, F[k].shape[0]):
-            for j in range(0, F[k].shape[1]):
-                if F[k][i, j] == 1:
-                    canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10, fill='green', width=0)
-                elif F[k][i, j] == -1:
-                    canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10, fill='red', width=0)
-                elif F[k][i, j] == -2:
-                    canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10, fill='black', width=0)
+        tracerRectangles(F[k], canvas)
         canvas.pack()
         bouton = tk.Button(fenetre, text="Suivant", command=fenetre.destroy)
         bouton.pack()
@@ -115,3 +137,14 @@ def affichage(F):
 
 def pause():
     input("Appuyer sur Entrée pour continuer . . .")
+
+
+def tracerRectangles(F, canvas):
+     for i in range(0, F.shape[0]):
+          for j in range(0, F.shape[1]):
+                if F[i, j] == 1:
+                    canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10, fill='green', width=0)
+                elif F[i, j] == -1:
+                    canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10, fill='red', width=0)
+                elif F[i, j] == -2:
+                    canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10, fill='black', width=0)
