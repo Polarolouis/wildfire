@@ -9,10 +9,11 @@ import random
 import tkinter as tk
 """
     Les états possibles de nos cases :
-        - 0 : pas d'arbre
-        - 1 : un arbre sain
         - -1 : un arbre en feu
         - -2 : un arbre mort
+        - 0 : pas d'arbre
+        - 1 : un arbre sain
+        - 2 : bordure
 """
 # Fonctions agissant sur la matrice
 
@@ -24,6 +25,21 @@ def genForet(n, p):
             for j in range(0, foret.shape[1]):
                 if random.random() <= p:
                     foret[i, j] = 1
+        return foret
+    else:
+        raise ValueError("n doit prendre une valeur de 2 au moins")
+
+
+def genForetBordure(n, p):
+    if n >= 2:
+        foret = np.full(shape=(n+1, n+1), fill_value=0)
+        for i in range(0, foret.shape[0]):
+            for j in range(0, foret.shape[1]):
+                if i == 0 or j == 0 or j == n+1 or i == n+1:
+                    foret[i, j] = 1
+                else:
+                    if random.random() <= p:
+                        foret[i, j] = 1
         return foret
     else:
         raise ValueError("n doit prendre une valeur de 2 au moins")
@@ -61,7 +77,8 @@ def propager(F, k, i, j):
         pass
 
 
-def propager2(F, k, i,j):
+def propager2(F, k, i, j):
+    ''' Propage le feu au k ieme tour '''
     print("rang :"+str(k)+" ("+str(i)+","+str(j)+")")
     # On ajuste les indices pour rester dans les index
     i = i-1
