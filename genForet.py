@@ -24,6 +24,7 @@ import tkinter as tk
 
 
 def genForet(n, p):
+    ''' Fonction générant la forêt '''
     if n >= 2:
         foret = np.full(shape=(n, n), fill_value=0)
         for i in range(0, foret.shape[0]):
@@ -36,6 +37,7 @@ def genForet(n, p):
 
 
 def genForetBordure(n, p):
+    ''' Fonction générant la forêt et une bordure '''
     if n >= 2:
         foret = np.full(shape=(n+1, n+1), fill_value=0)
         for i in range(0, foret.shape[0]):
@@ -50,7 +52,8 @@ def genForetBordure(n, p):
         raise ValueError("n doit prendre une valeur de 2 au moins")
 
 
-def enflammer(foret, x, y):  # Fonction mettant le feu aléatoirement à une case
+def enflammer(foret, x, y):
+    ''' Fonction mettant le feu aléatoirement à une case '''
     if x == -1:
         x = random.randint(0, foret.shape[0]-1)
     if y == -1:
@@ -60,11 +63,13 @@ def enflammer(foret, x, y):  # Fonction mettant le feu aléatoirement à une cas
     return foretEnflammée
 
 
-def enflammerBordure(foret, x, y):  # Fonction mettant le feu aléatoirement à une case
-    if x == -1 or x == 0:
-        x = random.randint(1, foret.shape[0]-1)
-    if y == -1 or x == 0:
-        y = random.randint(1, foret.shape[1]-1)
+def enflammerBordure(foret, x, y):
+    ''' Fonction mettant le feu aléatoirement à une case
+    en tenant compte de la bordure'''
+    if x == -1 or x == 0 or x == foret.shape[0]-1:
+        x = random.randint(1, foret.shape[0]-2)
+    if y == -1 or y == 0 or y == foret.shape[1]-1:
+        y = random.randint(1, foret.shape[1]-2)
     foretEnflammée = np.copy(foret)
     foretEnflammée[x, y] = -1
     return foretEnflammée
@@ -130,17 +135,21 @@ def feuDeForet(F):
         for i in range(0, F[k].shape[0]):
             for j in range(0, F[k].shape[1]):
                 if F[k-1][i, j] == -1:  # Si la case est en feu au rang k
-                    if F[k-1][i, j] == 0:  # Si cette case ne portait pas d'arbre au rang k-1 alors on propage le feu et la case s'éteint
-                        propager2(F, k, i, j)
+                    if F[k-1][i, j] == 0:
+                        ''' Si cette case ne portait pas d'arbre au rang k-1
+                        alors on propage le feu et la case s'éteint '''
+                        propager(F, k, i, j)
                         F[k][i, j] = 0
-                    elif F[k-2][i, j] == -1:  # Si la case était en feu au tour précédent : propage et mort de l'arbre
-                        propager2(F, k, i, j)
+                    elif F[k-2][i, j] == -1:
+                        '''Si la case était en feu au tour précédent :
+                        propage et mort de l'arbre '''
+                        propager(F, k, i, j)
                         F[k][i, j] = -2
-                    else:  # La case a été mise en feu, elle propage le feu
-                        propager2(F, k, i, j)
+                    else:
+                        ''' La case a été mise en feu, elle propage le feu '''
+                        propager(F, k, i, j)
         print(F[k], "Rang : {}".format(k))
         k = k+1
-
 
 
 def feuDeForetBordure(F):
@@ -150,14 +159,19 @@ def feuDeForetBordure(F):
         for i in range(0, F[k].shape[0]):
             for j in range(0, F[k].shape[1]):
                 if F[k-1][i, j] == -1:  # Si la case est en feu au rang k
-                    if F[k-1][i, j] == 0:  # Si cette case ne portait pas d'arbre au rang k-1 alors on propage le feu et la case s'éteint
-                        propager2(F, k, i, j)
+                    if F[k-1][i, j] == 0:
+                        ''' Si cette case ne portait pas d'arbre au rang k-1
+                        alors on propage le feu et la case s'éteint '''
+                        propager(F, k, i, j)
                         F[k][i, j] = 0
-                    elif F[k-2][i, j] == -1:  # Si la case était en feu au tour précédent : propage et mort de l'arbre
-                        propager2(F, k, i, j)
+                    elif F[k-2][i, j] == -1:
+                        ''' Si la case était en feu au tour précédent :
+                        propage et mort de l'arbre '''
+                        propager(F, k, i, j)
                         F[k][i, j] = -2
-                    else:  # La case a été mise en feu, elle propage le feu
-                        propager2(F, k, i, j)
+                    else:
+                        ''' La case a été mise en feu, elle propage le feu '''
+                        propager(F, k, i, j)
         print(F[k], "Rang : {}".format(k))
         k = k+1
 
@@ -172,9 +186,11 @@ def wildfire(n, p, x=-1, y=-1):
 
 
 def wildfireBordure(n, p, x=-1, y=-1):
-    F = [genForetBordure(n, p)]  # Génération de la forêt selon les paramètres voulus
+    ''' Génération de la forêt selon les paramètres voulus '''
+    F = [genForetBordure(n, p)]
     print(F[0], "Instant initial")
-    F.append(enflammerBordure(F[0], x, y))  # La forêt est enflammée puis stockée
+    ''' La forêt est enflammée puis stockée '''
+    F.append(enflammerBordure(F[0], x, y))
     print(F[1], "Rang : 1 (Départ de feu)")
     feuDeForetBordure(F)
     return F
@@ -184,12 +200,14 @@ def wildfireBordure(n, p, x=-1, y=-1):
 
 
 def affichage(F):
+    ''' Utilise la librairie tkinter pour l'affichage de la forêt '''
     for k in range(0, len(F)):
         fenetre = tk.Tk()  # Crée la fenêtre que l'on va modifier
         label = tk.Label(fenetre, text="Wildfire")  # Met en place le titre
         label.pack()
-        canvas = tk.Canvas(fenetre, width=(F[k].shape[0]+2)*10, height=(F[k].shape[1]+2)*10, background='#c0c0c0')  # On définit le canevas qui affiche notre forêt
-        canvas.create_rectangle(10, 10, (F[k].shape[0]+1)*10, (F[0].shape[1]+1)*10, fill='#c68c53')
+        ''' On définit le canevas qui affiche notre forêt '''
+        canvas = tk.Canvas(fenetre, width=(F[k].shape[0]+2)*10,
+                           height=(F[k].shape[1]+2)*10)
         tracerRectangles(F[k], canvas)
         canvas.pack()
         bouton = tk.Button(fenetre, text="Suivant", command=fenetre.destroy)
@@ -204,13 +222,18 @@ def pause():
 
 
 def tracerRectangles(F, canvas):
+    ''' Trace les cases '''
     for i in range(0, F.shape[0]):
         for j in range(0, F.shape[1]):
             if F[i, j] == 1:
-                canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10, fill='green', width=0)
+                canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10,
+                                        fill='green', width=0)
             elif F[i, j] == -1:
-                canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10, fill='red', width=0)
+                canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10,
+                                        fill='red', width=0)
             elif F[i, j] == -2:
-                canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10, fill='black', width=0)
+                canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10,
+                                        fill='black', width=0)
             elif F[i, j] == 2:
-                canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10, fill='brown', width=0)
+                canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10,
+                                        fill='brown', width=0)
