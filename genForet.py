@@ -215,6 +215,27 @@ def affichage(F):
         fenetre.mainloop()  # Affiche la fenêtre
 
 
+def affichage2(F):
+    ''' Utilise la librairie tkinter pour l'affichage de la forêt '''
+    p = 1  # Initialise le 'pas' entre les rang de la forêt
+    fenetre = tk.Tk()  # Crée la fenêtre que l'on va modifier
+    label = tk.Label(fenetre, text="Wildfire")  # Met en place le titre
+    label.pack()
+    canvas = tk.Canvas(fenetre, width=(F[0].shape[0]+2)*10,
+                       height=(F[0].shape[1]+2)*10)
+    canvas.pack(side=tk.LEFT)
+    tracerRectangles(F[0], canvas)  # On trace la forêt initiale
+    k = 0  # Le rang
+    #sPas = tk.Scale(fenetre, variable=p, orient=tk.HORIZONTAL, _to=10, _from=1)
+    #sPas.pack(side=tk.BOTTOM)
+    bSuivant = tk.Button(fenetre, text='Suivant', command= lambda : rangSuivant(F, p, k, canvas))
+    bSuivant.pack()
+    bQuit = tk.Button(fenetre, text='Quitter', command=fenetre.quit)
+    bQuit.pack(side=tk.BOTTOM)
+    fenetre.mainloop()
+    fenetre.destroy()
+
+
 # Fonctions utiles à l'affichage
 
 def pause():
@@ -236,4 +257,11 @@ def tracerRectangles(F, canvas):
                                         fill='black', width=0)
             elif F[i, j] == 2:
                 canvas.create_rectangle((i+1)*10, (j+1)*10, (i+2)*10, (j+2)*10,
-                                        fill='brown', width=0)
+                                        fill='#c0c0c0', width=0)
+
+
+def rangSuivant(F, p, k, canvas):
+    global k
+    k = k + p  # On avance le rang du pas
+    tracerRectangles(F[k], canvas)
+    print(k)
