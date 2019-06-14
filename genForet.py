@@ -225,10 +225,11 @@ def affichage2(F):
                        height=(F[0].shape[1]+2)*10)
     canvas.pack(side=tk.LEFT)
     tracerRectangles(F[0], canvas)  # On trace la forêt initiale
+    global k
     k = 0  # Le rang
-    #sPas = tk.Scale(fenetre, variable=p, orient=tk.HORIZONTAL, _to=10, _from=1)
-    #sPas.pack(side=tk.BOTTOM)
-    bSuivant = tk.Button(fenetre, text='Suivant', command= lambda : rangSuivant(F, p, k, canvas))
+    # sPas = tk.Scale(fenetre, variable=p, orient=tk.HORIZONTAL, to=10)
+    # sPas.pack(side=tk.BOTTOM)
+    bSuivant = tk.Button(fenetre, text='Suivant '+str(p)+' tours', command=lambda: rangSuivant(F, p, k, canvas))
     bSuivant.pack()
     bQuit = tk.Button(fenetre, text='Quitter', command=fenetre.quit)
     bQuit.pack(side=tk.BOTTOM)
@@ -260,8 +261,8 @@ def tracerRectangles(F, canvas):
                                         fill='#c0c0c0', width=0)
 
 
-def rangSuivant(F, p, k, canvas):
+def rangSuivant(F, p, r, canvas):
     global k
-    k = k + p  # On avance le rang du pas
+    k = r + p  # On avance le rang du pas
     tracerRectangles(F[k], canvas)
     print(k)
