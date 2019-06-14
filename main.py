@@ -18,6 +18,7 @@ import tkinter as tk
         -  0 : pas d'arbre
         -  1 : un arbre sain
         -  2 : bordure
+
 """
 
 # Fonctions agissant sur la matrice
