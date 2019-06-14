@@ -15,9 +15,9 @@ import tkinter as tk
     Les états possibles de nos cases :
         - -1 : un arbre en feu
         - -2 : un arbre mort
-        - 0 : pas d'arbre
-        - 1 : un arbre sain
-        - 2 : bordure
+        -  0 : pas d'arbre
+        -  1 : un arbre sain
+        -  2 : bordure
 """
 
 # Fonctions agissant sur la matrice
@@ -76,6 +76,7 @@ def enflammerBordure(foret, x, y):
 
 
 def propager(F, k, i, j):
+    ''' Propage le feu au k ieme tour '''
     try:
         if F[k-1][i-1, j] == 1:  # Si la case au dessus est un arbre
             F[k][i-1, j] = -1  # La case au dessus brûle
